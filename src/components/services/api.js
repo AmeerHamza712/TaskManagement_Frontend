@@ -1,29 +1,27 @@
-// import axios from "axios";
-
-// // Falls back to localhost for local dev, but reads from an env var so the
-// // same build can point at a real backend in staging/production.
-// const api = axios.create({
-//   baseURL: import.meta.env?.VITE_API_URL || "http://localhost:3001",
-//   withCredentials: true,
-// });
-
-// export default api;
-
 import axios from "axios";
 
-// Helper to dynamically get the computer's local IP address in development
-const getDevBaseUrl = () => {
+// Helper to get the correct base URL safely
+const getBaseUrl = () => {
+  // 1. If VITE_API_URL is provided (e.g., in Vercel production), use it
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  // 2. Fallback for local network testing (if accessing via local IP)
   if (
     typeof window !== "undefined" &&
-    window.location.hostname !== "localhost"
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
   ) {
-    return `http://${window.location.hostname}:3001`;
+    return `http://${window.location.hostname}:3000`; // Matches your backend port 3000
   }
-  return "http://localhost:3001";
+
+  // 3. Default local development fallback
+  return "http://localhost:3000";
 };
 
 const api = axios.create({
-  baseURL: import.meta.env?.VITE_API_URL || getDevBaseUrl(),
+  baseURL: getBaseUrl(),
   withCredentials: true,
 });
 
