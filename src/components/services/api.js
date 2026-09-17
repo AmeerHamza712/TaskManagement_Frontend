@@ -13,11 +13,11 @@ const getBaseUrl = () => {
     window.location.hostname !== "localhost" &&
     window.location.hostname !== "127.0.0.1"
   ) {
-    return `http://${window.location.hostname}:3000`; // Matches your backend port 3000
+    return `http://${window.location.hostname}:3001`; // Matches your backend port 3000
   }
 
   // 3. Default local development fallback
-  return "http://localhost:3000";
+  return "http://localhost:3001";
 };
 
 const api = axios.create({
