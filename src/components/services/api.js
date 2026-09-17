@@ -1,23 +1,30 @@
 import axios from "axios";
 
-// Helper to get the correct base URL safely
 const getBaseUrl = () => {
-  // 1. If VITE_API_URL is provided (e.g., in Vercel production), use it
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+  // 1. Check Vite's environment variable safely
+  const envUrl = import.meta.env?.VITE_API_URL;
+  if (envUrl) {
+    return envUrl;
   }
 
-  // 2. Fallback for local network testing (if accessing via local IP)
+  // 2. If running live on Vercel frontend domain but env var missed, fallback directly to live backend
+  if (
+    typeof window !== "undefined" &&
+    window.location.hostname.includes("vercel.app")
+  ) {
+    return "https://taskmanagement-backend-amber.vercel.app";
+  }
+
+  // 3. Local development fallbacks
   if (
     typeof window !== "undefined" &&
     window.location.hostname !== "localhost" &&
     window.location.hostname !== "127.0.0.1"
   ) {
-    return `http://${window.location.hostname}:3001`; // Matches your backend port 3000
+    return `http://${window.location.hostname}:3000`;
   }
 
-  // 3. Default local development fallback
-  return "http://localhost:3001";
+  return "http://localhost:3000";
 };
 
 const api = axios.create({
