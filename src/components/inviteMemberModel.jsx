@@ -25,11 +25,10 @@ export default function InviteMemberModal({ teamId, onClose, onSuccess }) {
     try {
       const sanitizedEmail = email.trim().toLowerCase();
 
-      const res = await api.post(`/api/invitations/team/${teamId}`, {
+      await api.post("/api/invitations/saveInvitation", {
         inviteeEmail: sanitizedEmail,
         role: role.toLowerCase(),
       });
-
       setMessage({
         type: "success",
         text: res.data?.message || "Invitation sent successfully!",
@@ -73,7 +72,7 @@ export default function InviteMemberModal({ teamId, onClose, onSuccess }) {
       )}
 
       <h2 className="text-lg font-bold text-slate-800 mb-4">
-        Invite Team Member
+        Invite Team Member MemberModel-2
       </h2>
 
       {message && (

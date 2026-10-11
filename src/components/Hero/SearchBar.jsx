@@ -101,7 +101,9 @@ export default function SearchBar({ loginUser }) {
     if (!userEmail) return;
     try {
       const formattedEmail = userEmail.trim().toLowerCase();
-      const res = await api.get(`/invitations/${formattedEmail}`);
+      const res = await api.get(
+        `api/invitations/getInvitation/${formattedEmail}`,
+      );
       const data = res.data.invitations || res.data || [];
       setInvitations(Array.isArray(data) ? data : []);
     } catch (error) {

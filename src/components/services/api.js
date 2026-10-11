@@ -1,34 +1,45 @@
+// ;
+
+// import axios from "axios";
+
+// // Helper to dynamically get the computer's local IP address in development
+// const getDevBaseUrl = () => {
+//   if (
+//     typeof window !== "undefined" &&
+//     window.location.hostname !== "localhost"
+//   ) {
+//     return `http://${window.location.hostname}:3001`;
+//   }
+//   return "http://localhost:3001";
+// };
+
+// const api = axios.create({
+//   baseURL: import.meta.env?.VITE_API_URL || getDevBaseUrl(),
+//   withCredentials: true,
+// });
+
+// export default api;
+
 import axios from "axios";
 
-const getBaseUrl = () => {
-  // 1. Check Vite's environment variable safely
-  const envUrl = import.meta.env?.VITE_API_URL;
-  if (envUrl) {
-    return envUrl;
+const getDevBaseUrl = () => {
+  if (typeof window === "undefined") {
+    return "http://localhost:3001";
   }
 
-  // 2. If running live on Vercel frontend domain but env var missed, fallback directly to live backend
-  if (
-    typeof window !== "undefined" &&
-    window.location.hostname.includes("vercel.app")
-  ) {
-    return "https://taskmanagement-backend-amber.vercel.app";
+  const hostname = window.location.hostname;
+
+  // Local development
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return "http://localhost:3001";
   }
 
-  // 3. Local development fallbacks
-  if (
-    typeof window !== "undefined" &&
-    window.location.hostname !== "localhost" &&
-    window.location.hostname !== "127.0.0.1"
-  ) {
-    return `http://${window.location.hostname}:3000`;
-  }
-
-  return "http://localhost:3000";
+  // Accessing the frontend from another device
+  return `http://${hostname}:3001`;
 };
 
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: import.meta.env.VITE_API_URL || getDevBaseUrl(),
   withCredentials: true,
 });
 

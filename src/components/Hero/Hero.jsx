@@ -6,6 +6,8 @@ import SearchBar from "./SearchBar";
 import InviteTeamMember from "../services/InviteTeamMember";
 import AddTaskModal from "../services/AddTask";
 
+import InviteMemberModal from "../inviteMemberModel";
+
 export function Hero({ loginUser }) {
   const [openInviteModal, setOpenInviteModal] = useState(false);
   const [openAddTaskModal, setOpenAddTaskModal] = useState(false);
